@@ -1,14 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import Spinner from '../layout/Spinner';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import GithubContext from '../../context/github/githubContext';
 
-const User = ({ user, loading, getUser, match}) => {
+const User = ({match}) => {
+
+    const githubContext = useContext(GithubContext);
+    const { getUser, loading, user, repos, getUserRepos } = githubContext;
 
     useEffect(() => {
         console.log("match.params.login", match.params.login);
         getUser(match.params.login);
-        //getUserRepos(match.params.login)
+        getUserRepos(match.params.login)
         // Below line removes error from console "React Hook useEffect has missing dependencies: 'getUser' and 'match.params.login'. Either include them or remove the dependency array. If 'getUser' changes too often, find the parent component that defines it and wrap that definition in useCallback"
         // eslint-disable-next-line
     }, []); //Empty set of bracket to get once, instead of loading again and again, since userEffects renders component again on change
@@ -82,12 +85,6 @@ const User = ({ user, loading, getUser, match}) => {
         
     )
     
-};
-
-User.propTypes = {
-    loading : PropTypes.bool.isRequired,
-    user: PropTypes.object.isRequired,
-    getUser: PropTypes.func.isRequired
 };
 
 export default User;
